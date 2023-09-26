@@ -1,0 +1,38 @@
+pipeline:
+  name: python-pipeline-sample
+  identifier: pythonpipelinesample
+  projectIdentifier: pythonpipelinesample
+  orgIdentifier: WiproPOC
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: personalgit
+        build: <+input>
+  stages:
+    - stage:
+        name: build test and run
+        identifier: build_test_and_run
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: k8sDeligate
+              namespace: harness
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: python_compile
+                  identifier: python_compile
+                  spec:
+                    connectorRef: dockerdeepak
+                    image: python:3.10.6-alpine
+                    shell: Sh
+                    command: python -m compileall ./

@@ -4,19 +4,13 @@ pipeline:
   projectIdentifier: pythonpipelinesample
   orgIdentifier: WiproPOC
   tags: {}
-  properties:
-    ci:
-      codebase:
-        connectorRef: personalgit
-        build: <+input>
   stages:
     - stage:
         name: build test and docker
         identifier: build_test_and_docker
-        description: ""
         type: CI
         spec:
-          cloneCodebase: true
+          cloneCodebase: false
           infrastructure:
             type: KubernetesDirect
             spec:
@@ -66,3 +60,6 @@ pipeline:
                       - latest
                       - v1
                     dockerfile: pythondockerfile
+          caching:
+            enabled: false
+            paths: []

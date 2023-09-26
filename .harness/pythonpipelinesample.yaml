@@ -11,8 +11,9 @@ pipeline:
         build: <+input>
   stages:
     - stage:
-        name: build test and run
-        identifier: build_test_and_run
+        name: build test and docker
+        identifier: build_test_and_docker
+        description: ""
         type: CI
         spec:
           cloneCodebase: true
@@ -28,10 +29,40 @@ pipeline:
             steps:
               - step:
                   type: Run
-                  name: python_compile
-                  identifier: python_compile
+                  name: compile
+                  identifier: compile
                   spec:
                     connectorRef: dockerdeepak
                     image: python:3.10.6-alpine
                     shell: Sh
                     command: python -m compileall ./
+                    privileged: false
+              - step:
+                  type: Run
+                  name: createDockerfile
+                  identifier: createDockerfile
+                  spec:
+                    connectorRef: dockerdeepak
+                    image: alpine
+                    shell: Sh
+                    command: |-
+                      touch pythondockerfile
+                      cat > pythondockerfile <<- EOM
+                      FROM python:3.10.6-alpine
+                      WORKDIR /python-pipeline-samples
+                      ADD . /python-pipeline-samples
+                      RUN pip install -r requirements.txt
+                      CMD ["python" , "app.py"]
+                      EOM
+                      cat pythondockerfile
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: build and push docker image
+                  identifier: build_and_push_docker_image
+                  spec:
+                    connectorRef: dockerdeepak
+                    repo: dockerdeepak/harness-py-sample
+                    tags:
+                      - latest
+                      - v1
+                    dockerfile: pythondockerfile

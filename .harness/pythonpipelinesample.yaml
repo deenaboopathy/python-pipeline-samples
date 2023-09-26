@@ -4,13 +4,20 @@ pipeline:
   projectIdentifier: pythonpipelinesample
   orgIdentifier: WiproPOC
   tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: GenericGit
+        timeout: 20m
+        repoName: python-pipeline-samples
+        build: <+input>
   stages:
     - stage:
         name: build test and docker
         identifier: build_test_and_docker
         type: CI
         spec:
-          cloneCodebase: false
+          cloneCodebase: true
           infrastructure:
             type: KubernetesDirect
             spec:

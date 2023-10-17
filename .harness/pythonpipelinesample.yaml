@@ -21,7 +21,7 @@ pipeline:
           infrastructure:
             type: KubernetesDirect
             spec:
-              connectorRef: k8sDeligate
+              connectorRef: harness
               namespace: default
               automountServiceAccountToken: true
               nodeSelector: {}

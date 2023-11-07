@@ -69,7 +69,7 @@ pipeline:
                     dockerfile: pythondockerfile
               - step:
                   type: Run
-                  name: Run_3
+                  name: teststep
                   identifier: Run_3
                   spec:
                     connectorRef: dockerdeepak

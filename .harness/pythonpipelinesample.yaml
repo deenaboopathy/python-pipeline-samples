@@ -67,15 +67,6 @@ pipeline:
                       - latest
                       - v1
                     dockerfile: pythondockerfile
-              - step:
-                  type: Run
-                  name: teststep
-                  identifier: Run_3
-                  spec:
-                    connectorRef: dockerdeepak
-                    image: ubuntu
-                    shell: Sh
-                    command: echo hello
           caching:
             enabled: false
             paths: []
